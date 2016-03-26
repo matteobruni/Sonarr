@@ -48,9 +48,10 @@ namespace Sonarr.Http.Extensions.Pipelines
                         response.Headers["Content-Encoding"] = "gzip";
                         response.Contents = s =>
                         {
-                            var gzip = new GZipStream(s, CompressionMode.Compress, true);
-                            data.CopyTo(gzip);
-                            gzip.Close();
+                            using (var gzip = new GZipStream(s, CompressionMode.Compress, true))
+                            {
+                                data.CopyTo(gzip);
+                            }
                         };
                     }
                 }
