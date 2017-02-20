@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
@@ -11,6 +10,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Plex.Models;
 using NzbDrone.Core.Rest;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.Plex
 {

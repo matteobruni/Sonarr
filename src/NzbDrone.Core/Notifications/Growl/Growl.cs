@@ -9,49 +9,26 @@ namespace NzbDrone.Core.Notifications.Growl
     {
         private readonly IGrowlService _growlService;
 
+        public override string Name => "Growl";
+
+
         public Growl(IGrowlService growlService)
         {
             _growlService = growlService;
         }
 
-        public override string Link
-        {
-            get { return "http://growl.info/"; }
-        }
+        public override string Link => "http://growl.info/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _growlService.SendNotification(title, grabMessage.Message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _growlService.SendNotification(title, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
         }
 
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name
-        {
-            get
-            {
-                return "Growl";
-            }
-        }
-
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
 
         public override ValidationResult Test()
         {

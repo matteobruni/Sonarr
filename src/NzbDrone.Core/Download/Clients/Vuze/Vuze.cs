@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
@@ -49,12 +48,6 @@ namespace NzbDrone.Core.Download.Clients.Vuze
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Vuze";
-            }
-        }
+        public override string Name => "Vuze";
     }
 }

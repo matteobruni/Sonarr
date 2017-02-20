@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Rest;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {

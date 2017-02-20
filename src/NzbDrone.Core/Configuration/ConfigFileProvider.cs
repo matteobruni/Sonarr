@@ -9,6 +9,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
@@ -133,33 +134,15 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public int Port
-        {
-            get { return GetValueInt("Port", 8989); }
-        }
+        public int Port => GetValueInt("Port", 8989);
 
-        public int SslPort
-        {
-            get { return GetValueInt("SslPort", 9898); }
-        }
+        public int SslPort => GetValueInt("SslPort", 9898);
 
-        public bool EnableSsl
-        {
-            get { return GetValueBoolean("EnableSsl", false); }
-        }
+        public bool EnableSsl => GetValueBoolean("EnableSsl", false);
 
-        public bool LaunchBrowser
-        {
-            get { return GetValueBoolean("LaunchBrowser", true); }
-        }
+        public bool LaunchBrowser => GetValueBoolean("LaunchBrowser", true);
 
-        public string ApiKey
-        {
-            get
-            {
-                return GetValue("ApiKey", GenerateApiKey());
-            }
-        }
+        public string ApiKey => GetValue("ApiKey", GenerateApiKey());
 
         public AuthenticationType AuthenticationMethod
         {
@@ -172,33 +155,18 @@ namespace NzbDrone.Core.Configuration
                     SetValue("AuthenticationMethod", AuthenticationType.Basic);
                     return AuthenticationType.Basic;
                 }
-                
+
                 return GetValueEnum("AuthenticationMethod", AuthenticationType.None);
             }
         }
 
-        public bool AnalyticsEnabled
-        {
-            get
-            {
-                return GetValueBoolean("AnalyticsEnabled", true, persist: false);
-            }
-        }
+        public bool AnalyticsEnabled => GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
-        public string Branch
-        {
-            get { return GetValue("Branch", "master").ToLowerInvariant(); }
-        }
+        public string Branch => GetValue("Branch", "master").ToLowerInvariant();
 
-        public string LogLevel
-        {
-            get { return GetValue("LogLevel", "Info"); }
-        }
+        public string LogLevel => GetValue("LogLevel", "Info");
 
-        public string SslCertHash
-        {
-            get { return GetValue("SslCertHash", ""); }
-        }
+        public string SslCertHash => GetValue("SslCertHash", "");
 
         public string UrlBase
         {
@@ -215,28 +183,13 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public string UiFolder
-        {
-            get
-            {
-                return GetValue("UiFolder", "UI", false);
-            }
-        }
+        public string UiFolder => GetValue("UiFolder", "UI", false);
 
-        public bool UpdateAutomatically
-        {
-            get { return GetValueBoolean("UpdateAutomatically", false, false); }
-        }
+        public bool UpdateAutomatically => GetValueBoolean("UpdateAutomatically", false, false);
 
-        public UpdateMechanism UpdateMechanism
-        {
-            get { return GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false); }
-        }
+        public UpdateMechanism UpdateMechanism => GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
 
-        public string UpdateScriptPath
-        {
-            get { return GetValue("UpdateScriptPath", "", false ); }
-        }
+        public string UpdateScriptPath => GetValue("UpdateScriptPath", "", false);
 
         public int GetValueInt(string key, int defaultValue)
         {
@@ -392,6 +345,11 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
             DeleteOldValues();
+
+            if (!AnalyticsEnabled)
+            {
+                NzbDroneLogger.UnRegisterRemoteLoggers();
+            }
         }
 
         public void Execute(ResetApiKeyCommand message)

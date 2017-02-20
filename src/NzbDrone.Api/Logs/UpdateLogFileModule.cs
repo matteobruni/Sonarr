@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -38,12 +37,6 @@ namespace NzbDrone.Api.Logs
             return Path.Combine(_appFolderInfo.GetUpdateLogFolder(), filename);
         }
 
-        protected override string DownloadUrlRoot
-        {
-            get
-            {
-                return "updatelogfile";
-            }
-        }
+        protected override string DownloadUrlRoot => "updatelogfile";
     }
 }

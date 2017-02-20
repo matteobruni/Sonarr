@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,13 +32,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             _logger = logger;
         }
 
-        public override int Order
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int Order => 1;
 
         public override IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles)
         {

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.EnsureThat;
@@ -66,11 +64,15 @@ namespace NzbDrone.Common.Disk
 
             foreach (var subDir in _diskProvider.GetDirectoryInfos(sourcePath))
             {
+                if (ShouldIgnore(subDir)) continue;
+
                 result &= TransferFolder(subDir.FullName, Path.Combine(targetPath, subDir.Name), mode, verificationMode);
             }
 
             foreach (var sourceFile in _diskProvider.GetFileInfos(sourcePath))
             {
+                if (ShouldIgnore(sourceFile)) continue;
+
                 var destFile = Path.Combine(targetPath, sourceFile.Name);
 
                 result &= TransferFile(sourceFile.FullName, destFile, mode, true, verificationMode);
@@ -103,11 +105,15 @@ namespace NzbDrone.Common.Disk
 
             foreach (var subDir in targetFolders.Where(v => !sourceFolders.Any(d => d.Name == v.Name)))
             {
+                if (ShouldIgnore(subDir)) continue;
+
                 _diskProvider.DeleteFolder(subDir.FullName, true);
             }
 
             foreach (var subDir in sourceFolders)
             {
+                if (ShouldIgnore(subDir)) continue;
+
                 filesCopied += MirrorFolder(subDir.FullName, Path.Combine(targetPath, subDir.Name));
             }
 
@@ -116,11 +122,15 @@ namespace NzbDrone.Common.Disk
 
             foreach (var targetFile in targetFiles.Where(v => !sourceFiles.Any(d => d.Name == v.Name)))
             {
+                if (ShouldIgnore(targetFile)) continue;
+
                 _diskProvider.DeleteFile(targetFile.FullName);
             }
 
             foreach (var sourceFile in sourceFiles)
             {
+                if (ShouldIgnore(sourceFile)) continue;
+
                 var targetFile = Path.Combine(targetPath, sourceFile.Name);
 
                 if (CompareFiles(sourceFile.FullName, targetFile))
@@ -354,7 +364,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -370,7 +380,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -389,7 +399,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, string.Format("Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath));
+                _logger.Error(ex, "Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -431,7 +441,7 @@ namespace NzbDrone.Common.Disk
 
                     if (i == RetryCount)
                     {
-                        _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath, i + 1, RetryCount);
+                        _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath);
                     }
                     else
                     {
@@ -565,6 +575,28 @@ namespace NzbDrone.Common.Disk
                 RollbackPartialMove(sourcePath, targetPath);
                 throw;
             }
+        }
+
+        private bool ShouldIgnore(DirectoryInfo folder)
+        {
+            if (folder.Name.StartsWith(".nfs"))
+            {
+                _logger.Trace("Ignoring folder {0}", folder.FullName);
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool ShouldIgnore(FileInfo file)
+        {
+            if (file.Name.StartsWith(".nfs"))
+            {
+                _logger.Trace("Ignoring file {0}", file.FullName);
+                return true;
+            }
+
+            return false;
         }
     }
 }

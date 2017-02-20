@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public NzbgetSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             RuleFor(c => c.Username).NotEmpty().When(c => !string.IsNullOrWhiteSpace(c.Password));
             RuleFor(c => c.Password).NotEmpty().When(c => !string.IsNullOrWhiteSpace(c.Username));
 
@@ -55,6 +54,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
         public bool UseSsl { get; set; }
+
+        [FieldDefinition(8, Label = "Add Paused", Type = FieldType.Checkbox, HelpText = "This option requires at least NzbGet version 16.0")]
+        public bool AddPaused { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

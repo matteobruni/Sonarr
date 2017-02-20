@@ -72,8 +72,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
 
-            var tries = 2;
-            var retryDelay = 100;
+            var tries = 5;
+            var retryDelay = 200;
             if (WaitForTorrent(hash, tries, retryDelay))
             {
                 _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
@@ -94,21 +94,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "rTorrent";
-            }
-        }
+        public override string Name => "rTorrent";
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using rTorrent", ProviderMessageType.Warning);
-            }
-        }
+        public override ProviderMessage Message => new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using rTorrent", ProviderMessageType.Warning);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
@@ -159,7 +147,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -208,7 +196,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -223,7 +211,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

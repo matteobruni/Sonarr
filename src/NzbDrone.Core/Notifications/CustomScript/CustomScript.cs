@@ -24,10 +24,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
             _logger = logger;
         }
 
-        public override string Link
-        {
-            get { return "https://github.com/Sonarr/Sonarr/wiki/Custom-Post-Processing-Scripts"; }
-        }
+        public override string Name => "Custom Script";
+
+        public override string Link => "https://github.com/Sonarr/Sonarr/wiki/Custom-Post-Processing-Scripts";
 
         public override void OnGrab(GrabMessage message)
         {
@@ -98,13 +97,6 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Custom Script";
-            }
-        }
 
         public override ValidationResult Test()
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
@@ -53,16 +52,16 @@ namespace NzbDrone.Core.Notifications.Boxcar
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.Error(ex, "Access Token is invalid: " + ex.Message);
+                    _logger.Error(ex, "Access Token is invalid");
                     return new ValidationFailure("Token", "Access Token is invalid");
                 }
 
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
                 return new ValidationFailure("Token", "Unable to send test message");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
                 return new ValidationFailure("", "Unable to send test message");
             }
         }
@@ -85,7 +84,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.Error(ex, "Access Token is invalid: " + ex.Message);
+                    _logger.Error(ex, "Access Token is invalid");
                     throw;
                 }
 

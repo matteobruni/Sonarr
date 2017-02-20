@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
@@ -184,6 +181,26 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [Test]
+        public void should_detect_rss_settings_for_LimeTorrents()
+        {
+            _indexerSettings.AllowZeroSize = true;
+
+            GivenRecentFeedResponse("TorrentRss/LimeTorrents.xml");
+
+            var settings = Subject.Detect(_indexerSettings);
+
+            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            {
+                UseEZTVFormat = false,
+                UseEnclosureUrl = true,
+                UseEnclosureLength = true,
+                ParseSizeInDescription = false,
+                ParseSeedersInDescription = false,
+                SizeElementName = null
+            });
+        }
+
+        [Test]
         [Ignore("Cannot reliably reject unparseable titles")]
         public void should_reject_rss_settings_for_AwesomeHD()
         {
@@ -218,7 +235,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
         [TestCase("BitMeTv/BitMeTv.xml")]
         [TestCase("Fanzub/fanzub.xml")]
-        [TestCase("KickassTorrents/KickassTorrents.xml")]
         [TestCase("IPTorrents/IPTorrents.xml")]
         [TestCase("Newznab/newznab_nzb_su.xml")]
         [TestCase("Nyaa/Nyaa.xml")]

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using FluentValidation.Results;
 using NLog;
 using RestSharp;
@@ -36,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Join
             catch (JoinException ex)
             {
                 _logger.Error(ex, "Unable to send Join message.");
-                throw ex;
+                throw;
             }
         }
 

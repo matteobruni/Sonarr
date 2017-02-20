@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using FluentValidation;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
@@ -56,7 +55,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public bool AlwaysUpdate { get; set; }
 
         [JsonIgnore]
-        public string Address { get { return string.Format("{0}:{1}", Host, Port); } }
+        public string Address => string.Format("{0}:{1}", Host, Port);
 
         public NzbDroneValidationResult Validate()
         {

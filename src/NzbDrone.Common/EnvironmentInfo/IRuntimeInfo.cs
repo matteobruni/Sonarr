@@ -7,10 +7,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool IsUserInteractive { get; }
         bool IsAdmin { get; }
         bool IsWindowsService { get; }
-        bool IsConsole { get; }
-        bool IsRunning { get; set; }
+        bool IsExiting { get; set; }
         bool RestartPending { get; set; }
         string ExecutingApplication { get; }
-        string RuntimeVersion { get; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
@@ -8,17 +7,11 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 {
     public class TorrentRssIndexer : HttpIndexerBase<TorrentRssIndexerSettings>
     {
-        public override string Name
-        {
-            get
-            {
-                return "Torrent RSS Feed";
-            }
-        }
+        public override string Name => "Torrent RSS Feed";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override bool SupportsSearch { get { return false; } }
-        public override int PageSize { get { return 0; } }
+        public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
+        public override bool SupportsSearch => false;
+        public override int PageSize => 0;
 
         private readonly ITorrentRssParserFactory _torrentRssParserFactory;
 

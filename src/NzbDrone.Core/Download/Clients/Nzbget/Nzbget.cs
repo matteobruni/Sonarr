@@ -32,9 +32,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
             var category = Settings.TvCategory;
+
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
+            var addpaused = Settings.AddPaused;
+
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, addpaused, Settings);
 
             if (response == null)
             {
@@ -56,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -120,7 +123,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -194,13 +197,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return historyItems;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "NZBGet";
-            }
-        }
+        public override string Name => "NZBGet";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
@@ -292,7 +289,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 {
                     return new ValidationFailure("Username", "Authentication failed");
                 }
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new ValidationFailure("Host", "Unable to connect to NZBGet");
             }
 

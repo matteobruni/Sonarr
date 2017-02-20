@@ -27,7 +27,7 @@ namespace NzbDrone.Host
 
         public void Spin()
         {
-            while (_runtimeInfo.IsRunning)
+            while (!_runtimeInfo.IsExiting)
             {
                 Thread.Sleep(1000);
             }

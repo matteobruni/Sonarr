@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Marr.Data;
 
 namespace NzbDrone.Core.Datastore
@@ -25,10 +22,7 @@ namespace NzbDrone.Core.Datastore
             return _database.GetDataMapper();
         }
 
-        public Version Version
-        {
-            get { return _database.Version; }
-        }
+        public Version Version => _database.Version;
 
         public void Vacuum()
         {

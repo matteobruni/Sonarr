@@ -1,10 +1,8 @@
 using System;
-using System.Data;
 using FluentMigrator;
+using FluentMigrator.Runner;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -28,7 +26,7 @@ namespace NzbDrone.Core.Test.Framework
                 BeforeMigration = m =>
                 {
                     var migration = m as TMigration;
-                    if (beforeMigration != null && migration is TMigration)
+                    if (beforeMigration != null && migration != null)
                     {
                         beforeMigration(migration);
                     }
@@ -41,13 +39,8 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public override void SetupDb()
         {
+            Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
             SetupContainer();
-        }
-
-        [Obsolete("Don't use Mocker/Repositories in MigrationTests, query the DB.", true)]
-        public new AutoMoqer Mocker
-        {
-            get { return base.Mocker; }
         }
     }
 }

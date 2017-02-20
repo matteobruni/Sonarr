@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using FluentValidation.Results;
 using NLog;
@@ -20,44 +19,17 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger = logger;
         }
 
-        public override string Link
-        {
-            get { return "https://plex.tv/"; }
-        }
+        public override string Name => "Plex Home Theater";
+        public override string Link => "https://plex.tv/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string header = "Sonarr - Grabbed";
-
-            Notify(Settings, header, grabMessage.Message);
+            Notify(Settings, EPISODE_GRABBED_TITLE_BRANDED, grabMessage.Message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string header = "Sonarr - Downloaded";
-
-            Notify(Settings, header, message.Message);
-        }
-
-        public override void OnRename(Series series)
-        {
-            
-        }
-
-        public override string Name
-        {
-            get
-            {
-                return "Plex Home Theater";
-            }
-        }
-
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
+            Notify(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message);
         }
 
         public override ValidationResult Test()
@@ -80,7 +52,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch (SocketException ex)
             {
-                var logMessage = string.Format("Unable to connect to PHT Host: {0}:{1}", Settings.Host, Settings.Port);
+                var logMessage = $"Unable to connect to PHT Host: {Settings.Host}:{Settings.Port}";
                 _logger.Debug(ex, logMessage);
             }
         }

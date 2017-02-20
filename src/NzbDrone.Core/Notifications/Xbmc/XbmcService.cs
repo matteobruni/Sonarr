@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -116,7 +115,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: " + ex.Message);
+                _logger.Error(ex, "Unable to send test message");
                 return new ValidationFailure("Host", "Unable to send test message");
             }
 

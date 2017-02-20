@@ -6,7 +6,6 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.Indexers.Exceptions;
@@ -24,12 +23,12 @@ namespace NzbDrone.Core.Indexers
 
         protected readonly IHttpClient _httpClient;
 
-        public override bool SupportsRss { get { return true; } }
-        public override bool SupportsSearch { get { return true; } }
-        public bool SupportsPaging { get { return PageSize > 0; } }
+        public override bool SupportsRss => true;
+        public override bool SupportsSearch => true;
+        public bool SupportsPaging => PageSize > 0;
 
-        public virtual int PageSize { get { return 0; } }
-        public virtual TimeSpan RateLimit { get { return TimeSpan.FromSeconds(2); } }
+        public virtual int PageSize => 0;
+        public virtual TimeSpan RateLimit => TimeSpan.FromSeconds(2);
 
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
@@ -261,14 +260,13 @@ namespace NzbDrone.Core.Indexers
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                var message = string.Format("{0} - {1}", ex.Message, url);
-                _logger.Warn(ex, message);
+                _logger.Warn(ex, "{0}", url);
             }
             catch (Exception feedEx)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
                 feedEx.Data.Add("FeedUrl", url);
-                _logger.Error(feedEx, "An error occurred while processing feed. " + url);
+                _logger.Error(feedEx, "An error occurred while processing feed. {0}", url);
             }
 
             return CleanupReleases(releases);

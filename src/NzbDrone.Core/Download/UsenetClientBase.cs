@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Exceptions;
@@ -28,13 +27,7 @@ namespace NzbDrone.Core.Download
             _httpClient = httpClient;
         }
         
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
 
         protected abstract string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent);
 

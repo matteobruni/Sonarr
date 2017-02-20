@@ -1,11 +1,10 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
-namespace NzbDrone.Core.Notifications.MediaBrowser
+namespace NzbDrone.Core.Notifications.Emby
 {
     public class MediaBrowserSettingsValidator : AbstractValidator<MediaBrowserSettings>
     {
@@ -41,15 +40,9 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
-        public string Address { get { return string.Format("{0}:{1}", Host, Port); } }
-        
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host) && Port > 0;
-            }
-        }
+        public string Address => $"{Host}:{Port}";
+
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
 
         public NzbDroneValidationResult Validate()
         {

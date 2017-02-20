@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Plex
         public PlexServerSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
         }
     }
 
@@ -44,13 +43,7 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
         public bool UseSsl { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host);
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 
         public NzbDroneValidationResult Validate()
         {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Boxcar
 {
@@ -14,43 +13,17 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://boxcar.io/client"; }
-        }
+        public override string Link => "https://boxcar.io/client";
+        public override string Name => "Boxcar";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            const string title = "Episode Grabbed";
-
-            _proxy.SendNotification(title, grabMessage.Message, Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
-
-            _proxy.SendNotification(title, message.Message, Settings);
-        }
-
-        public override void OnRename(Series series)
-        {
-        }
-
-        public override string Name
-        {
-            get
-            {
-                return "Boxcar";
-            }
-        }
-
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE , message.Message, Settings);
         }
 
         public override ValidationResult Test()

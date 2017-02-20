@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications
@@ -21,12 +20,6 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnRename { get; set; }
         public HashSet<int> Tags { get; set; }
 
-        public override bool Enable
-        {
-            get
-            {
-                return OnGrab || OnDownload || (OnDownload && OnUpgrade);
-            }
-        }
+        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade);
     }
 }

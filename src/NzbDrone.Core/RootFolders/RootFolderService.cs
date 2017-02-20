@@ -37,7 +37,8 @@ namespace NzbDrone.Core.RootFolders
                                                                      ".appledb",
                                                                      ".appledesktop",
                                                                      ".appledouble",
-                                                                     "@eadir"
+                                                                     "@eadir",
+                                                                     ".grab"
                                                                  };
 
 
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.RootFolders
                 //We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Unable to get free space and unmapped folders for root folder: " + folder.Path);
+                    _logger.Error(ex, "Unable to get free space and unmapped folders for root folder {0}", folder.Path);
                     folder.FreeSpace = 0;
                     folder.UnmappedFolders = new List<UnmappedFolder>();
                 }
@@ -131,8 +132,11 @@ namespace NzbDrone.Core.RootFolders
         private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             _logger.Debug("Generating list of unmapped folders");
+
             if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("Invalid path provided", "path");
+            {
+                throw new ArgumentException("Invalid path provided", nameof(path));
+            }
 
             var results = new List<UnmappedFolder>();
             var series = _seriesRepository.All().ToList();
@@ -143,8 +147,8 @@ namespace NzbDrone.Core.RootFolders
                 return results;
             }
 
-            var seriesFolders = _diskProvider.GetDirectories(path).ToList();
-            var unmappedFolders = seriesFolders.Except(series.Select(s => s.Path), PathEqualityComparer.Instance).ToList();
+            var possibleSeriesFolders = _diskProvider.GetDirectories(path).ToList();
+            var unmappedFolders = possibleSeriesFolders.Except(series.Select(s => s.Path), PathEqualityComparer.Instance).ToList();
 
             foreach (string unmappedFolder in unmappedFolders)
             {
@@ -156,7 +160,7 @@ namespace NzbDrone.Core.RootFolders
             results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
 
             _logger.Debug("{0} unmapped folders detected.", results.Count);
-            return results;
+            return results.OrderBy(u => u.Name, StringComparer.InvariantCultureIgnoreCase).ToList();
         }
 
         public RootFolder Get(int id)

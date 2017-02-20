@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -17,7 +15,7 @@ namespace NzbDrone.Common.Http
             AllowAutoRedirect = true;
             Cookies = new Dictionary<string, string>();
             
-            if (!RuntimeInfoBase.IsProduction)
+            if (!RuntimeInfo.IsProduction)
             {
                 AllowAutoRedirect = false;
             }

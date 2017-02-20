@@ -75,13 +75,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return actualHash.ToUpper();
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Deluge";
-            }
-        }
+        public override string Name => "Deluge";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
@@ -100,7 +94,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (DownloadClientException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex, "Couldn't get list of torrents");
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -204,12 +198,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (DownloadClientAuthenticationException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure("Password", "Authentication failed");
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 switch (ex.Status)
                 {
                     case WebExceptionStatus.ConnectFailure:
@@ -233,7 +227,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -284,7 +278,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, ex.Message);
+                _logger.Error(ex);
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

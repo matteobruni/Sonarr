@@ -10,6 +10,7 @@ src/**/[Oo]bj/
 *.suo
 *.user
 *.sln.docstates
+.vs/
 
 # Build results
 *_i.c
@@ -132,3 +133,5 @@ output/*
 
 _start
 _temp_*/**/*
+
+src/.idea/

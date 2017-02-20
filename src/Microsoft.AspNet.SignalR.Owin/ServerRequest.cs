@@ -5,13 +5,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Principal;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Owin.Infrastructure;
-using Microsoft.AspNet.SignalR.Hosting;
 
 namespace Microsoft.AspNet.SignalR.Owin
 {
-    using WebSocketFunc = Func<IDictionary<string, object>, Task>;
     public partial class ServerRequest : 
 #if NET45
         IWebSocketRequest

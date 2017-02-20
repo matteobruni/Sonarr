@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
@@ -31,13 +30,7 @@ namespace NzbDrone.Core.Parser.Model
             } 
         }
 
-        public bool IsSpecial
-        {
-            get
-            {
-                return SeasonNumber == 0;
-            }
-        }
+        public bool IsSpecial => SeasonNumber == 0;
 
         public override string ToString()
         {

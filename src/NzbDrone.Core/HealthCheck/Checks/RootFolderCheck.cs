@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Tv;
 
@@ -38,12 +37,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
             return new HealthCheck(GetType());
         }
 
-        public override bool CheckOnConfigChange
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CheckOnConfigChange => false;
     }
 }

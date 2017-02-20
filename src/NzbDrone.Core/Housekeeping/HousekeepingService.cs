@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping
@@ -36,7 +34,7 @@ namespace NzbDrone.Core.Housekeeping
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Error running housekeeping task: " + housekeeper.GetType().Name);
+                    _logger.Error(ex, "Error running housekeeping task: {0}", housekeeper.GetType().Name);
                 }
             }
 

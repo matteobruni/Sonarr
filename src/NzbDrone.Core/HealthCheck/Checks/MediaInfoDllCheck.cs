@@ -15,18 +15,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
             catch (Exception e)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "MediaInfo could not be loaded " + e.Message);
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, $"MediaInfo Library could not be loaded {e.Message}");
             }
 
             return new HealthCheck(GetType());
         }
 
-        public override bool CheckOnConfigChange
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CheckOnConfigChange => false;
     }
 }

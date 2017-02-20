@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using FluentValidation.Results;
 using NLog;
@@ -9,7 +8,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -24,13 +22,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
         public TimeSpan ScanGracePeriod { get; set; }
 
-        public override bool PreferTorrentFile
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool PreferTorrentFile => true;
 
         public TorrentBlackhole(IScanWatchFolder scanWatchFolder,
                                 ITorrentFileInfoReader torrentFileInfoReader,
@@ -88,22 +80,9 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Torrent Blackhole";
-            }
-        }
+        public override string Name => "Torrent Blackhole";
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
-            }
-        }
-
+        public override ProviderMessage Message => new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
 
 
         public override IEnumerable<DownloadClientItem> GetItems()

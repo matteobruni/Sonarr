@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using FluentValidation.Results;
@@ -20,10 +19,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             _logger = logger;
         }
 
-        public override string Link
-        {
-            get { return "http://xbmc.org/"; }
-        }
+        public override string Link => "http://xbmc.org/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -45,13 +41,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Kodi (XBMC)";
-            }
-        }
+        public override string Name => "Kodi (XBMC)";
 
         public override ValidationResult Test()
         {

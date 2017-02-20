@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public SabnzbdSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
 
             RuleFor(c => c.ApiKey).NotEmpty()
                                   .WithMessage("API Key is required when username/password are not configured")

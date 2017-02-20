@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Common.Http;
+﻿using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -17,9 +16,6 @@ namespace NzbDrone.Core.Indexers
             HttpRequest = httpRequest;
         }
 
-        public HttpUri Url
-        {
-            get { return HttpRequest.Url; }
-        }
+        public HttpUri Url => HttpRequest.Url;
     }
 }

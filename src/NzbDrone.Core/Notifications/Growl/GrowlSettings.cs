@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Growl
         public GrowlSettingsValidator()
         {
             RuleFor(c => c.Host).ValidHost();
-            RuleFor(c => c.Port).GreaterThan(0);
+            RuleFor(c => c.Port).InclusiveBetween(1, 65535);
         }
     }
 
@@ -33,13 +32,7 @@ namespace NzbDrone.Core.Notifications.Growl
         [FieldDefinition(2, Label = "Password")]
         public string Password { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host) && !string.IsNullOrWhiteSpace(Password) && Port > 0;
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host) && !string.IsNullOrWhiteSpace(Password) && Port > 0;
 
         public NzbDroneValidationResult Validate()
         {

@@ -2,15 +2,12 @@
 using System.Linq;
 using FluentAssertions;
 using Moq;
-using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
@@ -170,6 +167,32 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
             torrentInfo.PublishDate.Should().Be(DateTime.Parse("Sun, 21 Feb 2016 09:51:54 +0000").ToUniversalTime());
             torrentInfo.Size.Should().Be(562386947);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_parse_recent_feed_from_LimeTorrents()
+        {
+            GivenRecentFeedResponse("TorrentRss/LimeTorrents.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("The Expanse 2x04 (720p-HDTV-x264-SVA)[VTV]");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://itorrents.org/torrent/51C578C9823DD58F6EEA287C368ED935843D63AB.torrent?title=The-Expanse-2x04-(720p-HDTV-x264-SVA)[VTV]");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().Be("http://www.limetorrents.cc/The-Expanse-2x04-(720p-HDTV-x264-SVA)[VTV]-torrent-8643587.html");
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("16 Feb 2017 05:24:26 +0300").ToUniversalTime());
+            torrentInfo.Size.Should().Be(880496711);
             torrentInfo.InfoHash.Should().BeNull();
             torrentInfo.MagnetUrl.Should().BeNull();
             torrentInfo.Peers.Should().NotHaveValue();
